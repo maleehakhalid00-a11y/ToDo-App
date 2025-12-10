@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-
-export const API = "http://localhost:5000"; // Backend URL
+export const API = "http://localhost:5000";
 
 export default function LoginRegister({ setToken }) {
-  const [name, setName] = useState(""); // for registration
+  const [name, setName] = useState(""); 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLogin, setIsLogin] = useState(true);
@@ -41,16 +40,12 @@ export default function LoginRegister({ setToken }) {
       setLoading(false);
     }
   };
-
-  // --- START OF NEW UI CHANGES ---
   return (
-    // 1. FULL BACKGROUND CHANGE: Dark gradient from top-left to bottom-right
     <div className="flex justify-center items-center min-h-screen p-4 
                     bg-gradient-to-br from-gray-900 to-[#101F41] text-white"> 
       
       <form
         onSubmit={handleSubmit}
-        // 2. FORM CARD REFINEMENT: Pure white background, higher shadow, slightly larger padding
         className="bg-white p-10 sm:p-12 rounded-xl shadow-2xl w-full max-w-sm 
                    flex flex-col gap-6 transition-all duration-300 transform hover:scale-[1.01] relative"
       >
@@ -67,8 +62,6 @@ export default function LoginRegister({ setToken }) {
             {errorMsg}
           </div>
         )}
-
-        {/* Input Fields: Retain Underline Style, Background still light for contrast */}
         {!isLogin && (
           <div className="relative">
             <input
@@ -112,8 +105,6 @@ export default function LoginRegister({ setToken }) {
                 Password
             </label>
         </div>
-
-        {/* Primary Button: Added scale on hover for a more interactive feel */}
         <button
           type="submit"
           className={`h-12 bg-[#0047AB] text-white font-bold rounded-lg shadow-xl transition-all duration-300 tracking-wider transform hover:scale-[1.02] hover:bg-blue-700
@@ -132,8 +123,6 @@ export default function LoginRegister({ setToken }) {
             isLogin ? "LOG IN SECURELY" : "CREATE ACCOUNT"
           )}
         </button>
-
-        {/* Toggle Link: Increased emphasis for the link itself */}
         <p className="text-sm text-center mt-3 text-gray-500">
           {isLogin ? "New user?" : "Returning user?"}{" "}
           <span
@@ -147,8 +136,6 @@ export default function LoginRegister({ setToken }) {
           </span>
         </p>
       </form>
-      
-      {/* Visual touch for the background to make it less flat */}
       <div className="absolute top-0 left-0 w-full h-full pointer-events-none opacity-10" 
            style={{ background: 'radial-gradient(circle at 10% 20%, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0) 60%)' }}>
       </div>

@@ -3,8 +3,6 @@ import { Link, useNavigate } from "react-router-dom";
 
 export default function Dashboard({ token, setToken }) { 
     const navigate = useNavigate();
-    
-    // Auth Check: Redirect if token is missing
     useEffect(() => {
         if (!token) {
             navigate('/login');
@@ -14,7 +12,7 @@ export default function Dashboard({ token, setToken }) {
     const handleLogout = () => {
         localStorage.removeItem("token");
         setToken("");
-        navigate('/login'); // Redirect after logout
+        navigate('/login');
     };
 
     return (
@@ -35,21 +33,15 @@ export default function Dashboard({ token, setToken }) {
                     Logout
                 </button>
             </header>
-
-            {/* Welcome Section */}
             <div className="max-w-7xl mx-auto mb-10 text-white p-6 rounded-xl border border-white/20">
                 <h2 className="text-4xl font-light mb-2">
                     Welcome Back, <span className="font-semibold text-[#0047AB]">User!</span>
                 </h2>
                 <p className="text-white/80">Manage your workload and review your progress below.</p>
             </div>
-            
-            {/* MAIN CONTENT AREA: Grid layout */}
             <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 max-w-7xl mx-auto">
                 
-                {/* CARD 1: View Active Todos */}
-                <Link
-                    to="/todos"
+                <Link to="/todos"
                     className="bg-white p-8 rounded-xl shadow-2xl text-left 
                                  transform transition duration-300 hover:scale-[1.03] 
                                  border-t-8 border-[#0047AB] block hover:shadow-blue-500/30"
@@ -63,8 +55,6 @@ export default function Dashboard({ token, setToken }) {
                         Go to Todos &rarr;
                     </span>
                 </Link>
-
-                {/* CARD 2: Completed Tasks */}
                 <Link
                     to="/completed"
                     className="bg-white p-8 rounded-xl shadow-2xl text-left 
@@ -80,10 +70,8 @@ export default function Dashboard({ token, setToken }) {
                         View Archive &rarr;
                     </span>
                 </Link>
-
-                {/* CARD 3: Account & Profile Management */}
                 <Link
-                    to="/profile" // <-- 💡 Link is set here
+                    to="/profile" 
                     className="bg-white p-8 rounded-xl shadow-2xl text-left 
                                  transform transition duration-300 hover:scale-[1.03] 
                                  border-t-8 border-[#8A2BE2] block hover:shadow-purple-500/30" 

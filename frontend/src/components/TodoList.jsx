@@ -6,29 +6,21 @@ import { useNavigate } from "react-router-dom";
 
 export default function TodoList({ token, setToken }) {
     const [todos, setTodos] = useState([]);
-    const [title, setTitle] = useState(""); // Task title
-    const [description, setDescription] = useState(""); // Task description
+    const [title, setTitle] = useState(""); 
+    const [description, setDescription] = useState("");
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate(); 
-
-    // --- Utility Functions ---
-
     const handleLogout = useCallback(() => {
         localStorage.removeItem("token");
         setToken("");
-        // Redirect to login page after clearing token
         navigate('/login'); 
     }, [setToken, navigate]);
 
     const goToDashboard = () => {
         navigate('/dashboard'); 
     };
-
-    // --- API Functions ---
-
     useEffect(() => {
         if (!token) {
-             // If no token is present when accessing the page, force logout/redirect
             handleLogout();
             return; 
         }
@@ -42,7 +34,6 @@ export default function TodoList({ token, setToken }) {
                 setTodos(res.data.filter((t) => !t.completed));
             } catch (err) {
                 console.error("Failed to fetch todos:", err);
-                // 🛑 AUTH FIX: This catches the 401 error from the backend
                 if (err.response?.status === 401) handleLogout(); 
             } finally {
                 setLoading(false);
@@ -51,26 +42,22 @@ export default function TodoList({ token, setToken }) {
 
         fetchTodos();
     }, [token, handleLogout]);
-
-    // Add new todo: Uses title and description states
     const addTodo = useCallback(async () => {
         if (!title.trim()) return;
 
         try {
             const res = await axios.post(
                 `${API}/todos`,
-                { title, description }, // Payload now includes both fields
+                { title, description }, 
                 { headers: { "x-auth-token": token } }
             );
             setTodos((prevTodos) => [res.data, ...prevTodos]);
-            setTitle(""); // Reset fields
+            setTitle(""); 
             setDescription("");
         } catch (err) {
             console.error("Failed to add todo:", err);
         }
     }, [token, title, description]); 
-
-    // Toggle completed (API update logic)
     const toggleComplete = useCallback(
         async (id, completed) => {
             try {
@@ -96,7 +83,6 @@ export default function TodoList({ token, setToken }) {
         [token]
     );
     
-    // Delete todo (API logic)
     const deleteTodo = useCallback(
         async (id) => {
             try {
@@ -111,12 +97,9 @@ export default function TodoList({ token, setToken }) {
         [token]
     );
     
-    // --- Render ---
 
     return (
         <div className="min-h-screen p-6 bg-gradient-to-br from-gray-900 to-[#101F41]"> 
-            
-            {/* Back Button and Header Layout */}
             <div className="flex items-start mb-8 w-full max-w-7xl mx-auto">
                 <button 
                     onClick={goToDashboard}
@@ -134,24 +117,17 @@ export default function TodoList({ token, setToken }) {
                 </div>
 
             </div>
-
-            {/* New Task Input Section with Title and Description */}
             <div className="w-full max-w-2xl mx-auto bg-white p-5 rounded-xl shadow-2xl mb-10">
                 <h3 className="text-xl font-bold text-gray-800 mb-3">Add New Task</h3>
                 <div className="flex flex-col gap-4">
-                    
-                    {/* Title Input */}
                     <input
                         type="text"
                         placeholder="Task Title (e.g., Finish final project report)"
                         value={title}
                         onChange={(e) => setTitle(e.target.value)}
-                        // 💡 FIX APPLIED: Allows submission via Enter key
                         onKeyDown={(e) => e.key === "Enter" && addTodo()} 
                         className="bg-gray-50 border-b-2 border-gray-300 focus:border-[#0047AB] outline-none transition-colors duration-300 pt-1 px-3 rounded-t-lg text-gray-800 text-lg h-12"
                     />
-
-                    {/* Description Input (Textarea for more space) */}
                     <textarea
                         placeholder="Detailed Description (Optional)"
                         value={description}
@@ -169,8 +145,6 @@ export default function TodoList({ token, setToken }) {
                     </button>
                 </div>
             </div>
-            
-            {/* Todo List items now display Title and Description */}
             <ul className="w-full max-w-2xl mx-auto space-y-4">
                 {loading ? (
                     <li className="text-center text-white/80 p-6 bg-white/10 rounded-xl shadow-lg flex items-center justify-center">
@@ -189,25 +163,17 @@ export default function TodoList({ token, setToken }) {
                         <li
                             key={todo._id}
                             className={`flex justify-between items-start p-5 bg-white rounded-xl shadow-lg transition-all duration-300 
-                                        transform hover:shadow-xl hover:scale-[1.01] ${todo.isExiting ? 'opacity-0 translate-x-10' : ''}`}
-                        >
-                            {/* Task Content Area */}
+                                        transform hover:shadow-xl hover:scale-[1.01] ${todo.isExiting ? 'opacity-0 translate-x-10' : ''}`} >
                             <div 
                                 className="text-gray-800 flex-grow text-left pr-4 cursor-pointer"
-                                onClick={() => toggleComplete(todo._id, todo.completed)}
-                            >
-                                {/* Title (Primary Text) */}
+                                onClick={() => toggleComplete(todo._id, todo.completed)}>
                                 <h4 className="text-lg font-bold text-[#0047AB] mb-1">{todo.title}</h4>
-                                
-                                {/* Description (Secondary Text) */}
                                 {todo.description && (
                                     <p className="text-sm text-gray-600 border-l-2 border-gray-200 pl-3">
                                         {todo.description}
                                     </p>
                                 )}
                             </div>
-
-                            {/* Action Buttons */}
                             <div className="flex gap-2 items-center flex-shrink-0">
                                 <button
                                     onClick={() => toggleComplete(todo._id, todo.completed)}

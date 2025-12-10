@@ -8,7 +8,7 @@ dotenv.config();
 const router = express.Router();
 const JWT_SECRET = process.env.JWT_SECRET;
 
-// REGISTER
+
 router.post('/register', async (req, res) => {
   const { name, email, password } = req.body;
   if (!email || !password) return res.status(400).json({ message: "Email and password required" });
@@ -27,7 +27,7 @@ router.post('/register', async (req, res) => {
   }
 });
 
-// LOGIN
+
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
   if (!email || !password) return res.status(400).json({ message: "Email and password required" });

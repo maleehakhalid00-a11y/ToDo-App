@@ -2,21 +2,14 @@ import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import { API } from "../../api";
 import { useNavigate } from "react-router-dom"; 
-
 export default function CompletedTasks({ token }) {
   const [completedTodos, setCompletedTodos] = useState([]);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate(); 
-
-  // --- Utility Functions ---
-  
   const goToDashboard = () => {
       navigate('/dashboard'); 
   };
-  
-  // --- API Functions ---
-
-  useEffect(() => {
+   useEffect(() => {
     if (!token) return;
 
     const fetchCompleted = async () => {
@@ -32,19 +25,13 @@ export default function CompletedTasks({ token }) {
         setLoading(false);
       }
     };
-
     fetchCompleted();
   }, [token]);
-
-  // 💡 IMPROVED: Mark as incomplete with exit animation
   const markIncomplete = useCallback(
     async (id) => {
-      // 1. Trigger the exit animation class
       setCompletedTodos((prev) => 
         prev.map((t) => (t._id === id ? { ...t, isExiting: true } : t))
       );
-
-      // 2. Perform API call and UI removal after a short delay
       setTimeout(async () => {
         try {
           await axios.put(`${API}/todos/${id}`, { completed: false }, { headers: { "x-auth-token": token } });
@@ -57,28 +44,23 @@ export default function CompletedTasks({ token }) {
             prev.map((t) => (t._id === id ? { ...t, isExiting: false } : t))
           );
         }
-      }, 300); // Match this delay to the CSS transition duration
+      }, 300); 
     },
     [token]
   );
 
   const deleteTodo = useCallback(
     async (id) => {
-      // Optimistically remove from UI
       setCompletedTodos((prev) => prev.filter((t) => t._id !== id));
       
       try {
         await axios.delete(`${API}/todos/${id}`, { headers: { "x-auth-token": token } });
       } catch (err) {
         console.error("Failed to delete completed todo:", err);
-        // If API fails, you might want to re-add the todo here
       }
     },
     [token]
   );
-
-  // --- Render ---
-
   return (
     <div className="min-h-screen p-6 bg-gradient-to-br from-gray-900 to-[#101F41]">
       
@@ -117,23 +99,17 @@ export default function CompletedTasks({ token }) {
           completedTodos.map((todo) => (
             <li
               key={todo._id}
-              // 💡 CSS Class updated to include transition and exit animation
               className={`flex justify-between items-start p-5 bg-white rounded-xl shadow-lg transition-all duration-300 transform hover:shadow-xl hover:scale-[1.005] ${todo.isExiting ? 'opacity-0 translate-x-full h-0 p-0 mb-0' : ''}`}
             >
-              {/* Task Content Area */}
               <div className="text-gray-800 flex-grow text-left pr-4">
-                  {/* Title (Line-through) */}
                   <h4 className="text-lg font-bold text-gray-500 line-through mb-1">{todo.title}</h4>
-                  
-                  {/* Description Display */}
+
                   {todo.description && (
                       <p className="text-sm text-gray-400 border-l-2 border-gray-200 pl-3 italic">
                           {todo.description}
                       </p>
                   )}
               </div>
-
-              {/* Action Buttons */}
               <div className="flex gap-3 items-center flex-shrink-0">
                 <button
                   onClick={() => markIncomplete(todo._id)}
