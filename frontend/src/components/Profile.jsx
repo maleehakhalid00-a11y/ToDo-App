@@ -33,14 +33,13 @@ export default function Profile() {
                 
                 <div className="bg-white/5 p-4 rounded-lg border border-white/20">
                     <p className="text-white/80">
-                        This section is functional! You can navigate here from the dashboard. 
-                        User data fetching and settings will be built here.
+                       coming soon
                     </p>
                 </div>
 
                 <button
                     className="bg-[#8A2BE2] hover:bg-purple-700 text-white px-6 py-3 rounded-lg transition duration-300 font-semibold shadow-md transform hover:scale-[1.01]"
-                    onClick={() => alert("This button works, but the full feature is still under construction!")}
+                    
                 >
                     Update Profile
                 </button>
