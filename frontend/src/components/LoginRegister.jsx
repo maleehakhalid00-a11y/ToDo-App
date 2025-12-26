@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-export const API = "http://localhost:5001";
+export const API = "http://localhost:5002";
 
 export default function LoginRegister({ setToken }) {
   const [name, setName] = useState(""); 
